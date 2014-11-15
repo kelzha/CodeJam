@@ -7,4 +7,4 @@ for imageFile in files:
 	filepath,filename = os.path.split(imageFile)
 	filtername,exts = os.path.splitext(filename)
 	im = Image.open(imageFile)
-	im.save('./training_dataset/' + filtername + '.jpg','JPEG')
+	im.save('./training_dataset/' + filtername + '.png','PNG')
