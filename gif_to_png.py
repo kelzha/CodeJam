@@ -1,6 +1,10 @@
 from PIL import Image
+import glob
+import os
 
-file_in = '11_1_.gif'; file_out = 'test.png'
-im = Image.open(file_in)
-im.save(file_out)
-
+files = glob.glob("./training_dataset/*.gif")
+for imageFile in files:
+	filepath,filename = os.path.split(imageFile)
+	filtername,exts = os.path.splitext(filename)
+	im = Image.open(imageFile)
+	im.save('./training_dataset/' + filtername + '.jpg','JPEG')
