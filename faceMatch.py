@@ -7,7 +7,7 @@ import numpy as np
 
 
 
-file_list = glob('./training_dataset_cropped/*.png')
+file_list = glob('./fullDataSetB/*.png')
 
 # open image
 im = Image.open(file_list[0]).convert("L")
@@ -18,15 +18,18 @@ H,W = np.shape(im)
 im_number = len(file_list)
 # fill array with rows as image
 # and columns as pixels
-arr = np.zeros([im_number,H*W])
-idArray = np.zeros([im_number,1])
-testArray = np.zeros([im_number -99,H*W])
-testId = np.zeros([im_number -99,1])
+print im_number
 
-testCounter =  0
-print file_list[0]
+datasetSize = 100;
+arr = np.zeros([datasetSize,H*W])
+idArray = np.zeros([datasetSize,1])
+testArray = np.zeros([im_number -datasetSize,H*W])
+testId = np.zeros([im_number -datasetSize,1])
 
-for i in range(im_number):
+
+
+
+for i in range(len(arr)):
 	filepath,filename = os.path.split(file_list[i])
 	filtername,exts = os.path.splitext(filename)
 	
@@ -37,14 +40,19 @@ for i in range(im_number):
 	
 	idArray[i] = int(filtername.split('_')[0])
 	arr[i,:] = np.reshape(np.asarray(im),[1,H*W])
+for i in range(len(testArray)):
+	filepath,filename = os.path.split(file_list[i])
+	filtername,exts = os.path.splitext(filename)
+	im = Image.open(file_list[i]).convert("L")
+	imArray = np.asarray(im)
 
-	testArray[testCounter] = np.reshape(np.asarray(im),[1,H*W])
-	testId[testCounter] =int(filtername.split('_')[0])
+	testArray[i] = np.reshape(np.asarray(im),[1,H*W])
+	testId[i] =int(filtername.split('_')[0])
 	# print int(filtername.split('_')[0])
-	testCounter+=1
+
 
 print len(arr)
-facial = eigenTools.EigenFacial(arr[:50],file_list[:50])
+facial = eigenTools.EigenFacial(arr,file_list[:len(arr)])
 scores = facial.train()
 
 # new_score = facial.get_score(arr[5],facial.mean_image)
@@ -55,3 +63,6 @@ for i in range(len(testArray)):
 	# new_score = facial.get_score(testFace,facial.mean_image)
 	if idArray[facial.recognize(testArray[i])] !=testId[i]:
 		print file_list[facial.recognize(testArray[i])] 
+	print [idArray[facial.recognize(testArray[i])],testId[i] ]
+	# print idArray[facial.recognize(testArray[i])]
+	# print facial.recognize(testArray[i])
