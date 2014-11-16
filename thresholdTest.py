@@ -1,32 +1,107 @@
 import numpy as np
 import cv2
 import sys
+import Image
+import glob
+import crop
+import aspectRatio
+import os
 
-impath = sys.argv[1]
+#Calculates the coordinates of a rectangle surrounding contours, returns a tuple
+def calcminmax(image, cont, length, minx, miny, maxx, maxy):
+	for i in cont:
+		if len(i) > length:
+			for j in i:
+				for k in j:
+					if k[0] > 10 and k[1] > 10 and k[0] < image.shape[1] - 10 and k[1] < image.shape[0]-10:
+						if k[0] < minx:
+							minx = k[0]
+						if k[1] < miny:
+							miny = k[1]
+						if k[0] > maxx:
+							maxx = k[0]
+						if k[1] > maxy:
+							maxy = k[1]
+	result = (minx, miny, maxx, maxy)
+	return result
 
-image = cv2.imread(impath)
-#gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+#Contrasts the image to make it so we can see shadows using underflow, returns an image
+def contrastImage(image, minx, miny, maxx, maxy):
+	for pixels in image:
+		for pixel in pixels:
+			if pixel[0] < minx or pixel[0] > maxx or pixel[0] < miny or pixel[0] > maxy:
+				pixel[0] = pixel[0] - 50
+				pixel[1] = pixel[1] - 50
+				pixel[2] = pixel[2] - 50
+	return image
 
-edge = cv2.Canny(image,380, 405)
+#Gets the final bounding rectangle of the face
+def getRectangle(impath):
+	'''filepath,filename = os.path.split(impath)
+	filtername,exts = os.path.splitext(filename)
+	'''
+	image = cv2.imread(impath)
+	edge = cv2.Canny(image, 200, 200)
+	binary, dst = cv2.threshold(edge,130,255,0)
+	contours, h = cv2.findContours(dst,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 
-binary, dst = cv2.threshold(edge,130,255,0)
+	'''
+	fast = cv2.FastFeatureDetector()
+	kp = fast.detect(edge, None)
+	kp, des = orb.compute(edge, kp)
+	img2 = cv2.drawKeypoints(image,kp,color=(0,255,0), flags=0)
+	contours, h = cv2.FindContours(binary,1,2)
+	cv2.watershed(image,m)
+	'''
 
+	rect1 = calcminmax(image, contours, 60, 1000000, 1000000, -1, -1)
 
-#fast = cv2.FastFeatureDetector()
-#kp = fast.detect(edge, None)
-# kp, des = orb.compute(edge, kp)
+	cv2.rectangle(image, (rect1[0], rect1[1]), (rect1[2], rect1[3]), (0,255,0))
+	
+	image = contrastImage(image, rect1[0], rect1[1], rect1[2], rect1[3])
+	edge = cv2.Canny(image, 400, 400)
+	binary, dst = cv2.threshold(edge,130,255,0)
+	contours, h = cv2.findContours(dst,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 
-#img2 = cv2.drawKeypoints(image,kp,color=(0,255,0), flags=0)
+	rect = calcminmax(image, contours, 100, rect1[0], rect1[1], rect1[2], rect1[2])
 
+	'''
+	image = cv2.imread(impath)
+	cv2.drawContours(image, contours,-1, (0,255,0))
+	cv2.rectangle(image, (rect[0], rect[1]), (rect[2], rect[3]), (0,255,0))
+	cv2.imshow(filtername, image)
+	cv2.waitKey(0)
+	'''
+	return rect
 
-#contours, h = cv2.FindContours(binary,1,2)
-#cv2.watershed(image,m)
+files = glob.glob("./training_dataset/*.png")
 
-contours, h = cv2.findContours(dst,1,2)
+ARList = [0] * len(files)
+CenterX = [0] * len(files)
+CenterY = [0] * len(files)
+Width = [0] * len(files)
+Height = [0] * len(files)
+counter = 0
 
+for imageFile in files:
+	rect = getRectangle(imageFile)
+	width = rect[2] - rect[0]
+	height = rect[3] - rect[1]
+	Width[counter] = width
+	print Width[counter]
+	Height[counter] = height
+	print Height[counter]
+	CenterX[counter] = rect[0] + width/2
+	CenterY[counter] = rect[1] + height/2
+	ARList[counter] = float(width)/float(height)
+	print ARList[counter]
+	counter += 1
 
-cv2.drawContours(image, contours,-1, (0,255,0))
+AR = aspectRatio.getAverage(ARList)
+width = aspectRatio.getAverage(Width)
+height = aspectRatio.getAverage(Height)
 
-#cv2.imshow("binary", image)
-
-cv2.waitKey(0)
+counter = 0
+for imageFile in files:
+	crop.cropp(imageFile, CenterX[counter], CenterY[counter], width, height)
+	counter = counter + 1

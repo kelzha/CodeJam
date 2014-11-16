@@ -1,11 +1,8 @@
 import numpy as np
 
-def getAR(H,W):
-	"Take numpy array of Height and Width values for all DB entries and compute optimal AR"
-
-	listAR = W/H
-
-	return np.mean(listAR)
+def getAverage(ratios):
+	"Take numpy array of AR values for all DB entries and compute optimal AR"
+	return np.mean(ratios)
 
 def newWidth(AR,H):
 	newW = AR * H
