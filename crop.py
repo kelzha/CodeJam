@@ -20,6 +20,6 @@ def cropp(imageFile, centerX, centerY, W, H):
     	bottom = im.size[1]
 
     box = (int(centerX - W/2.0), top, int(centerX + W/2.0), bottom)
-    print box
+    # print box
     cropped_im = im.crop(box)
     cropped_im.save("edited_" +filtername+".png",'PNG')

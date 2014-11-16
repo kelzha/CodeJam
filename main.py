@@ -7,7 +7,7 @@ from face_rec.utils import make_array
 
 filepath = sys.argv[1]
 rect = tTest.getRectangle(filepath)
-print rect
+# print rect
 
 contents = open('avgHW.csv','r').read()
 

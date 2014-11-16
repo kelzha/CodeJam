@@ -70,7 +70,7 @@ def getRectangle(impath):
 	binary, dst = cv2.threshold(edge,130,255,0)
 	contours, h = cv2.findContours(dst,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 	rect = calcminmax(image, contours, 60, 20, rect1[0], rect1[1], rect1[2], rect1[3])
-	print filtername
+	# print filtername
 	
 	'''image = cv2.imread(impath)
 	cv2.drawContours(image, contours,-1, (0,255,0))
