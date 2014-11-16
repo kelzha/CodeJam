@@ -3,8 +3,8 @@ import sys
 import os
 import crop
 import cv2
-from face_rec.recognize import EigenfaceRecon
-from face_rec.utils import make_array
+from face_rec.recognize import EigenfaceRecon,FishRecon
+from face_rec.utils import make_array,judge
 from PIL import Image
 
 filepath = sys.argv[1]
@@ -32,5 +32,13 @@ filepath = "edited_" + filepath
 
 arr = make_array(filepath)
 
-recon = EigenfaceRecon()
-print recon.recognize(arr)
+recon = FishRecon()
+best_idx,max_match = recon.recognize(arr)
+match = judge(max_match,int(best_idx))
+
+print max_match
+
+if match > -1:
+	print "%i" % match
+else:
+	print "Face not in database"

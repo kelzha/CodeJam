@@ -62,14 +62,12 @@ class EigenfaceRecon(object):
 		normalized = np.linalg.norm(diff,axis = 1)
 
 		best_fit = normalized.argmin()
-
+		print "I AM IN THE WRONG DAMN FN"
 		return int(self.labels[best_fit])
 
 
 
 class FishRecon(object):
-	"""Uses Linear Discriminant Analysis on set of data, similarly to PCA.
-	"""
 	def __init__(self):
 		self.mean = np.load('bin/fishfaces/mean.npy')
 		self.scalings = np.load('bin/fishfaces/scalings.npy')
@@ -77,26 +75,22 @@ class FishRecon(object):
 		self.intercept = np.load('bin/fishfaces/intercept.npy')
 		self.classes = np.load('bin/fishfaces/classes.npy')
 
-		# fish=FishTrainer(train,labels)
-		# self.mean,self.scalings,self.coeffs,self.intercept,self.classes = fish.data()
+# fish=FishTrainer(train,labels)
+# self.mean,self.scalings,self.coeffs,self.intercept,self.classes = fish.data()
 
 	def recognize(self,novel_vector):
-	    X = np.dot(novel_vector - self.mean,self.scalings)
-	    res = np.dot(X, self.coeffs)+self.intercept
-	    best = res.argmax()
+		X = np.dot(novel_vector - self.mean,self.scalings)
+		res = np.dot(X, self.coeffs)+self.intercept
+		best = res.argmax()
 
-	    match = utils.judge(int(res.max(),self.classes[best])
+		return self.classes[best],res.max()
+		
 
-		if match > -1:
-			return "%i" % match
-		else:
-			return "Face not in database"
-
-	    # if only_index:
-	    # 	return int(self.classes[best])
-	    # else:
-		   #  return int(self.classes[best]),float(res.max())
-                                
+# if only_index:
+# 	return int(self.classes[best])
+# else:
+   #  return int(self.classes[best]),float(res.max())
+                        
 
 
 		
