@@ -36,9 +36,9 @@ recon = FishRecon()
 best_idx,max_match = recon.recognize(arr)
 match = judge(max_match,int(best_idx))
 
-print max_match
+# print max_match
 
 if match > -1:
-	print "%i" % match
+	sys.stdout.write(match)
 else:
-	print "Face not in database"
+	sys.stdout.write("Face not in Database.")
