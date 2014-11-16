@@ -39,6 +39,6 @@ match = judge(max_match,int(best_idx))
 # print max_match
 
 if match > -1:
-	sys.stdout.write(match)
+	sys.stdout.write("%i\n" % match)
 else:
 	sys.stdout.write("Face not in Database.")
