@@ -63,5 +63,5 @@ scores = facial.train()
 # assert(facial.recognize(arr[0]) == 0)
 for i in range(len(testArray)):
 	# new_score = facial.get_score(testFace,facial.mean_image)
-	if idArray[facial.recognize(testArray[i])] != testId[i]:
+	if idArray[facial.recognize(testArray[i])] != idArray[i]:
 		print fileTestArray[i]

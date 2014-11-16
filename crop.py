@@ -10,7 +10,8 @@ def cropp(imageFile, centerX, centerY, W, H):
     filtername,exts = os.path.splitext(filename)
     im = Image.open(imageFile)
     #print im.size
-
+    W = 0.75*(float(W))
+    H = 0.75*(float(H))
     #Address blackboxing at bottom
     bottom = int(centerY + H/2)
     top = int(centerY - H/2)
@@ -23,4 +24,4 @@ def cropp(imageFile, centerX, centerY, W, H):
     box = (int(centerX - W/2), top, int(centerX + W/2), bottom)
     print box
     cropped_im = im.crop(box)
-    cropped_im.save(filepath + "_cropped/" +filtername+'_cropped'+".png",'PNG')
+    cropped_im.save(filepath + "_cropped2/" +filtername+'_cropped'+".png",'PNG')
