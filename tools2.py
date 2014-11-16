@@ -1,6 +1,6 @@
 #TODO:
 #Adjust number of eigenfaces
-#
+#hi phil
 
 import numpy as np
 import itertools

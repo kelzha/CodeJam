@@ -6,7 +6,7 @@ import numpy as np
 from random import shuffle
 
 
-
+#hi phil
 file_list = glob('./training_dataset_cropped2/*.png')
 shuffle(file_list)
 # open image
