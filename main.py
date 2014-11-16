@@ -2,11 +2,12 @@ import thresholdTest as tTest
 import sys
 import crop
 import cv2
-import face_rec as frec
+from face_rec.recognize import EigenfaceRecon
+from face_rec.utils import make_array
 
 filepath = sys.argv[1]
 rect = tTest.getRectangle(filepath)
-# print rect
+print rect
 
 contents = open('avgHW.csv','r').read()
 
@@ -20,9 +21,9 @@ centerX = (rect[2] + rect[0])/2
 
 crop.cropp(filepath,centerX,centerY,W,H)
 
-filepath += "_edited"
+filepath = "edited_" + filepath
 
-arr = frec.utils.make_array(filepath)
+arr = make_array(filepath)
 
-recon = fac_rec.recognize.EigenfaceRecon()
+recon = EigenfaceRecon()
 print recon.recognize(arr)
