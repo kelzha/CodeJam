@@ -14,7 +14,7 @@ def project_face(the_face,eigenfaces,mean_face=None):
 	
 	return np.dot(the_face - mean_face,eigenfaces.T)
 
-def make_eigenfaces(cropped_figs, labels, number_of_eigenfaces = None):
+def make_eigenfaces(cropped_figs, number_of_eigenfaces = None):
     """Inputs : 
 	o a Nx(H*W) array of pictures, where N is the number of faces and H*W are the
 		height and width of a picture. The dimensions must be the same for all
@@ -52,7 +52,7 @@ you should flatten() all your images and vstack() them in order to obtain a
     skpca = PCA()
     skpca.fit(centered_figs)
 
-    return sklda.components_[:number_of_eigenfaces],mean_image,centered_figs
+    return skpca.components_[:number_of_eigenfaces],mean_image,centered_figs
 
 class EigenFacial(object):
 	"""Class that can be trained with respect to an input database (figures 
@@ -76,8 +76,9 @@ class EigenFacial(object):
 		from sklearn.lda import LDA
 
 		predictions = [0] * len(self.eigenfaces)
+		fitter = [self.eigenfaces, 1]
 		clf = LDA()
-		clf.fit(self.eigenfaces, self.labels)
+		clf.fit(fitter, self.labels)
 		counter = 0
 		for face in faces:
 			predictions[counter] = clf.predict(face)
