@@ -1,11 +1,18 @@
 import thresholdTest as tTest
 import sys
+import os
 import crop
 import cv2
 from face_rec.recognize import EigenfaceRecon
 from face_rec.utils import make_array
+from PIL import Image
 
 filepath = sys.argv[1]
+im = Image.open(filepath)
+filtername,exts = os.path.splitext(filepath)
+filepath = filtername + '.png'
+im.save(filepath)
+
 rect = tTest.getRectangle(filepath)
 # print rect
 
