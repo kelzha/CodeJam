@@ -1,4 +1,4 @@
-import face_rec.tools as eigenTools
+import tools2 as eigenTools
 import os
 from PIL import Image
 from glob import glob
