@@ -87,10 +87,6 @@ class EigenFacialTrainer(object):
 		if do_return:	
 			return self.scores
 
-	def compute_distance(self,score):
-
-		return np.linalg.norm(self.scores - score,axis = 1)
-
 	def save(self,folder_path):
 		"""What needs to be saved to directly open a trained EigenFacial
 		is 

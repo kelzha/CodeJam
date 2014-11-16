@@ -22,6 +22,7 @@ crop.cropp(filepath,centerX,centerY,W,H)
 
 filepath += "_edited"
 
-arr = frec.makeArray(filepath)
+arr = frec.utils.make_array(filepath)
 
-frec.eigenFacial(arr)
+recon = fac_rec.recognize.EigenfaceRecon()
+print recon.recognize(arr)
