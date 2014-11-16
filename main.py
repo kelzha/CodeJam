@@ -1,10 +1,18 @@
 import thresholdTest as tTest
 import sys
+import os
 import crop
 import cv2
-import face_rec as frec
+from face_rec.recognize import EigenfaceRecon
+from face_rec.utils import make_array
+from PIL import Image
 
 filepath = sys.argv[1]
+im = Image.open(filepath)
+filtername,exts = os.path.splitext(filepath)
+filepath = filtername + '.png'
+im.save(filepath)
+
 rect = tTest.getRectangle(filepath)
 # print rect
 
@@ -20,9 +28,9 @@ centerX = (rect[2] + rect[0])/2
 
 crop.cropp(filepath,centerX,centerY,W,H)
 
-filepath += "_edited"
+filepath = "edited_" + filepath
 
-arr = frec.utils.make_array(filepath)
+arr = make_array(filepath)
 
-recon = fac_rec.recognize.EigenfaceRecon()
+recon = EigenfaceRecon()
 print recon.recognize(arr)

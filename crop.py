@@ -11,15 +11,15 @@ def cropp(imageFile, centerX, centerY, W, H):
     im = Image.open(imageFile)
     #print im.size
     #Address blackboxing at bottom
-    bottom = int(centerY + H/2)
-    top = int(centerY - H/2)
+    bottom = int(centerY + H/2.0)
+    top = int(centerY - H/2.0)
 
     if bottom > im.size[1]:
     	delta = bottom - im.size[1]
         top -= delta
     	bottom = im.size[1]
 
-    box = (int(centerX - W/2), top, int(centerX + W/2), bottom)
+    box = (int(centerX - W/2.0), top, int(centerX + W/2.0), bottom)
     # print box
     cropped_im = im.crop(box)
-    cropped_im.save(filtername + "_edited"+".png",'PNG')
+    cropped_im.save("edited_" +filtername+".png",'PNG')
