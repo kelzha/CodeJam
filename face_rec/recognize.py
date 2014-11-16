@@ -1,4 +1,5 @@
 import numpy as np
+import utils
 
 def project_face(centered_face,eigenfaces):
 	"""Projects the novel centered face in the eigenface space.
@@ -62,6 +63,11 @@ class EigenfaceRecon(object):
 
 		best_fit = normalized.argmin()
 
-		return "ID : %i" % self.labels[best_fit]
+		match = utils.judge(score,self.labels[best_fit])
+
+		if match > -1:
+			return "ID : %i" % match
+		else:
+			return "Face not in database"
 
 

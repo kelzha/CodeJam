@@ -12,4 +12,10 @@ def get_IDs(trained_filenames):
 	split_ID = lambda x:int(x.split('\\')[1].split('_')[0])
 	IDs = [split_ID(name) for name in trained_filenames]
 	return IDs
+
+def judge(score, ID):
+	if score < -5:
+		return -1
+	else:
+		return ID
 	
