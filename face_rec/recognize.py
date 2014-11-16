@@ -65,8 +65,9 @@ class EigenfaceRecon(object):
 
 		match = utils.judge(score,self.labels[best_fit])
 
+
 		if match > -1:
-			return "ID : %i" % match
+			return "%i" % match
 		else:
 			return "Face not in database"
 

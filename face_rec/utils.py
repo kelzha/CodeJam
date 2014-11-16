@@ -14,7 +14,7 @@ def get_IDs(trained_filenames):
 	return IDs
 
 def judge(score, ID):
-	if score < -5:
+	if score < -10:
 		return -1
 	else:
 		return ID
