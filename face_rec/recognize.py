@@ -65,6 +65,8 @@ class EigenfaceRecon(object):
 
 		return int(self.labels[best_fit])
 
+
+
 class FishRecon(object):
 	"""Uses Linear Discriminant Analysis on set of data, similarly to PCA.
 	"""
@@ -78,14 +80,22 @@ class FishRecon(object):
 		# fish=FishTrainer(train,labels)
 		# self.mean,self.scalings,self.coeffs,self.intercept,self.classes = fish.data()
 
-	def recognize(self,novel_vector,only_index = True):
+	def recognize(self,novel_vector):
 	    X = np.dot(novel_vector - self.mean,self.scalings)
 	    res = np.dot(X, self.coeffs)+self.intercept
 	    best = res.argmax()
-	    if only_index:
-	    	return int(self.classes[best])
-	    else:
-		    return int(self.classes[best]),float(res.max())
+
+	    match = utils.judge(int(res.max(),self.classes[best])
+
+		if match > -1:
+			return "%i" % match
+		else:
+			return "Face not in database"
+
+	    # if only_index:
+	    # 	return int(self.classes[best])
+	    # else:
+		   #  return int(self.classes[best]),float(res.max())
                                 
 
 
