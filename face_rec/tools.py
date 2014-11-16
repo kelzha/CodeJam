@@ -88,11 +88,19 @@ class EigenFacial(object):
 		self.scores = self.get_score(self.centered_faces)		
 		return self.scores
 
-	def recognize(self,novel_face,name_of_method='euler'):
-		pass
-		# novel_score = self.
-		
+	def compute_distance(self,score):
 
+		return np.linalg.norm(self.scores - score,axis = 1)
+
+	def recognize(self,novel_face,name_of_method='euler'):
+		
+		novel_score = self.get_score(novel_face,self.mean_image)
+
+		diff = np.linalg.norm(self.scores - novel_score,axis = 1)
+		best_fit = diff.argmin()
+
+		return best_fit
+		
 if __name__ == '__main__':
 	import os
 	from PIL import Image
@@ -131,7 +139,12 @@ if __name__ == '__main__':
 	    arr[i,:] = np.reshape(np.asarray(im),[1,H*W])
 
 	facial = EigenFacial(arr[:20],file_list[:20])
-	facial.train()
+	scores = facial.train()
+
+	new_score = facial.get_score(arr[0],facial.mean_image)
+	assert(np.max(new_score - scores[0]) < 10**-10)
+	assert(facial.recognize(arr[0]) == 0)
+
 
 
 
