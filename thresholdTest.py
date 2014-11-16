@@ -6,6 +6,7 @@ import glob
 import crop
 import aspectRatio
 import os
+'''THIS WILL NOT WORK IF THE PERSON'S FACE IS WITHIN 20 PIXELS OF THE SIDE'''
 
 def count(i, delta, image):
 	count = 0
