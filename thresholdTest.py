@@ -86,7 +86,7 @@ def getRectangle(impath):
 	cv2.waitKey(0)'''
 	return rect
 
-files = glob.glob("./fullDataSetB/" + "*.png")
+files = glob.glob("./training_dataset/" + "*.png")
 
 ARList = [0] * len(files)
 CenterX = [0] * len(files)
