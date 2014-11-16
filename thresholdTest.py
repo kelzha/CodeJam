@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 import sys
-import Image
+from PIL import Image
 import glob
 import crop
 import aspectRatio
@@ -86,34 +86,34 @@ def getRectangle(impath):
 	cv2.waitKey(0)'''
 	return rect
 
-files = glob.glob("./training_dataset/" + "*.png")
+# files = glob.glob("./training_dataset/" + "*.png")
 
-ARList = [0] * len(files)
-CenterX = [0] * len(files)
-CenterY = [0] * len(files)
-Width = [0] * len(files)
-Height = [0] * len(files)
-counter = 0
+# ARList = [0] * len(files)
+# CenterX = [0] * len(files)
+# CenterY = [0] * len(files)
+# Width = [0] * len(files)
+# Height = [0] * len(files)
+# counter = 0
 
-for imageFile in files:
-	rect = getRectangle(imageFile)
-	width = rect[2] - rect[0]
-	height = rect[3] - rect[1]
-	Width[counter] = width
-	print Width[counter]
-	Height[counter] = height
-	print Height[counter]
-	CenterX[counter] = rect[0] + width/2
-	CenterY[counter] = rect[1] + height/2
-	ARList[counter] = float(width)/float(height)
-	print ARList[counter]
-	counter += 1
+# for imageFile in files:
+# 	rect = getRectangle(imageFile)
+# 	width = rect[2] - rect[0]
+# 	height = rect[3] - rect[1]
+# 	Width[counter] = width
+# 	print Width[counter]
+# 	Height[counter] = height
+# 	print Height[counter]
+# 	CenterX[counter] = rect[0] + width/2
+# 	CenterY[counter] = rect[1] + height/2
+# 	ARList[counter] = float(width)/float(height)
+# 	print ARList[counter]
+# 	counter += 1
 
-AR = aspectRatio.getAverage(ARList)
-width = aspectRatio.getAverage(Width)
-height = aspectRatio.getAverage(Height)
+# AR = aspectRatio.getAverage(ARList)
+# width = aspectRatio.getAverage(Width)
+# height = aspectRatio.getAverage(Height)
 
-counter = 0
-for imageFile in files:
-	crop.cropp(imageFile, CenterX[counter], CenterY[counter], width, height)
-	counter = counter + 1
+# counter = 0
+# for imageFile in files:
+# 	crop.cropp(imageFile, CenterX[counter], CenterY[counter], width, height)
+# 	counter = counter + 1
