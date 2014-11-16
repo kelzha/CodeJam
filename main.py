@@ -25,5 +25,3 @@ filepath += "_edited"
 arr = frec.makeArray(filepath)
 
 frec.eigenFacial(arr)
-
-
