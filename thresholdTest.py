@@ -16,7 +16,7 @@ def count(i, delta, image):
 				count += 1
 	return count
 
-#Calculates the coordinates of a rectangle surrounding contours, returns a tuple
+'''Calculates the coordinates of a rectangle surrounding contours, returns a tuple'''
 def calcminmax(image, cont, lengthx, lengthy, minx, miny, maxx, maxy):
 	delta = 21
 	for i in cont:
@@ -39,7 +39,7 @@ def calcminmax(image, cont, lengthx, lengthy, minx, miny, maxx, maxy):
 	result = (minx, miny, maxx, maxy)
 	return result
 
-#Contrasts the image to make it so we can see shadows using underflow, returns an image
+'''Contrasts the image to make it so we can see shadows using underflow, returns an image'''
 def contrastImage(image, minx, miny, maxx, maxy):
 	for pixels in image:
 		for pixel in pixels:
@@ -49,29 +49,22 @@ def contrastImage(image, minx, miny, maxx, maxy):
 				pixel[2] = pixel[2] - 20
 	return image
 
-#Gets the final bounding rectangle of the face
+'''Gets the final bounding rectangle of the face'''
 def getRectangle(impath):
 	filepath,filename = os.path.split(impath)
 	filtername,exts = os.path.splitext(filename)
 
+	'''Reads the first image and makes a preliminary bounding box'''
 	image = cv2.imread(impath)
 	edge = cv2.Canny(image, 300, 300)
 	binary, dst = cv2.threshold(edge,130,255,0)
 	contours, h = cv2.findContours(dst,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-
-	'''
-	fast = cv2.FastFeatureDetector()
-	kp = fast.detect(edge, None)
-	kp, des = orb.compute(edge, kp)
-	img2 = cv2.drawKeypoints(image,kp,color=(0,255,0), flags=0)
-	contours, h = cv2.FindContours(binary,1,2)
-	cv2.watershed(image,m)
-	'''
-
 	rect1 = calcminmax(image, contours, 60, 60, 1000000, 1000000, -1, -1)
 
-	cv2.rectangle(image, (rect1[0], rect1[1]), (rect1[2], rect1[3]), (0,255,0))
+
+	#cv2.rectangle(image, (rect1[0], rect1[1]), (rect1[2], rect1[3]), (0,255,0))	
 	
+	'''Reads the image again and contrasts it for shadows'''
 	image = contrastImage(image, rect1[0], rect1[1], rect1[2], rect1[3])
 	edge = cv2.Canny(image, 250, 250)
 	binary, dst = cv2.threshold(edge,130,255,0)
