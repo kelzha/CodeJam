@@ -2,6 +2,8 @@
 
 import numpy as np
 import itertools
+from sklearn.lda import LDA
+from sklearn.decomposition.pca import PCA
 
 def make_eigenfaces(cropped_figs,number_of_eigenfaces = None):
     """Inputs : 
@@ -17,7 +19,6 @@ def make_eigenfaces(cropped_figs,number_of_eigenfaces = None):
 	Example usage:
 	eigenfaces,mean_image = eigenfaces(images)
 	"""
-    from sklearn.decomposition.pca import PCA
 	#Make sure the array is oriented properly. The number of columns should 
 	#be greater than the number of rows.
     try:
@@ -52,14 +53,56 @@ def project_face(the_face,eigenfaces,mean_face=None):
 	
 	return np.dot(the_face - mean_face,eigenfaces.T)
 
+class FishTrainer(object):
+	"""Class that can be trained with respect to an input database
+	This means calculating mean, scalings, coefficients, intercept and 
+	arranging classes.
+
+	Example usage:
+		fish = FishTrainer()
+		fishRecon = recognize.FishRecon(fish.data())
+		"""
+	def __init__(self,train,labels):
+		self.lda = LDA()
+		self.lda.fit(train,labels)
+
+	def data(self):
+		return (self.lda.xbar_,
+				self.lda.scalings_,
+		        self.lda.coef_.T,
+				self.lda.intercept_,
+				self.lda.classes_)
+
+	def save(self,folder_path):
+		"""What needs to be saved to directly open a trained FishRecon()
+		is 
+		o mean
+		o scalings
+		o coefficients
+		o intercept
+		o classes
+
+		These are all ndarrays
+		"""
+		np.save(folder_path+'mean',self.lda.xbar_)
+		np.save(folder_path+'scalings',self.lda.scalings_)
+		np.save(folder_path+'coef',self.lda.coef_.T)
+		np.save(folder_path+'intercept',self.lda.intercept_)
+		np.save(folder_path+'classes',self.lda.classes_)
+		# return d
+
+
+
+
+
 class EigenFacialTrainer(object):
 	"""Class that can be trained with respect to an input database (figures 
-		and labels) in order to identify a novel target face
+		and labels). This means calculating eigenfaces, scores and mean_face.
 	
 	Example usage:
-		facial = EigenFacial(faces,labels)
+		facial = EigenFacialTrainer(faces,labels)
 		facial.train()
-		facial.predict(novel_face,name_of_method)
+		facial.save()
 	"""
 	def __init__(self,faces,labels):
 		assert(faces.shape[0] == len(labels) or faces.shape[1] == len(labels))
@@ -151,9 +194,14 @@ def pre_process(filenames):
 
 	IDs = utils.get_IDs(filenames)
 
+	#Train EigenFacial
 	facial = EigenFacialTrainer(arr,IDs)
 	facial.train()
 	arr_names = facial.save('bin/eigenfaces/')
+
+	#Train FishFacial
+	fish = FishTrainer(arr,IDs)
+	fish.save('bin/fishfaces/')
 
 if __name__ == '__main__':
 	"""If running python script, give folder name as argument

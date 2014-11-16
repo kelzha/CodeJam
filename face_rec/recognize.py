@@ -1,4 +1,5 @@
 import numpy as np
+from pre_process import FishTrainer
 
 def project_face(centered_face,eigenfaces):
 	"""Projects the novel centered face in the eigenface space.
@@ -62,6 +63,36 @@ class EigenfaceRecon(object):
 
 		best_fit = normalized.argmin()
 
-		return "ID : %i" % self.labels[best_fit]
+		return int(self.labels[best_fit])
+
+class FishRecon(object):
+	"""Uses Linear Discriminant Analysis on set of data, similarly to PCA.
+	"""
+	def __init__(self):
+		self.mean = np.load('bin/fishfaces/mean.npy')
+		self.scalings = np.load('bin/fishfaces/scalings.npy')
+		self.coeffs = np.load('bin/fishfaces/coef.npy')
+		self.intercept = np.load('bin/fishfaces/intercept.npy')
+		self.classes = np.load('bin/fishfaces/classes.npy')
+
+		# fish=FishTrainer(train,labels)
+		# self.mean,self.scalings,self.coeffs,self.intercept,self.classes = fish.data()
+
+	def recognize(self,novel_vector,only_index = True):
+	    X = np.dot(novel_vector - self.mean,self.scalings)
+	    res = np.dot(X, self.coeffs)+self.intercept
+	    best = res.argmax()
+	    if only_index:
+	    	return int(self.classes[best])
+	    else:
+		    return int(self.classes[best]),float(res.max())
+                                
+
+
+		
+		
+
+                                
+
 
 
