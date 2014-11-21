@@ -38,13 +38,25 @@ centerX = (rect[2] + rect[0])/2
 im = crop.cropp(filepath,rect)
 
 arr = np.asarray(im)
-plt.imshow(arr)
-plt.show()
+# plt.imshow(arr)
+# plt.show()
 
-# recon = EigenfaceRecon('bin/phase2_eigenfacial_2/')
-recon = EigenfaceRecon('bin/phase2_eigenfacial_2/')
+################
+########Use Fish
+################
 # recon = FishRecon('bin/phase2_fish_1/')
+# best_idx,max_match = recon.recognize(arr.flatten())
+# if max_match > 10:
+# 	print "This is : %r" % best_idx
+# else:
+# 	print "No match."
 
+################
+########Use Eigen
+#################
+recon = EigenfaceRecon('bin/phase2_eigenfacial_2/')
 best_idx,max_match = recon.recognize(arr.flatten())
-# print best_idx
-# print max_match
+if max_match[0] < 10000:
+	print "This is : %r" % best_idx[0]
+else:
+	print "No match."
