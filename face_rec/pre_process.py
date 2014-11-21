@@ -267,9 +267,9 @@ if __name__ == '__main__':
 	# IDs = [split_ID(name) for name in trained_names]
 	# print IDs
 
-	trainer = FishTrainer(arr,IDs)
+	trainer = EigenFacialTrainer(arr,IDs)
 	trainer.train()
-	trainer.save('bin/phase2_fish_1/')
+	trainer.save('bin/phase2_eigenfacial_2/')
 
 
 
