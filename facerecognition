@@ -1,14 +1,15 @@
 #!/usr/local/bin/python
 # IMPORTANT THE ABOVE SHOULD MATCH THE PATH TO PYTHON ON YOUR MACHINE
 
-import thresholdTest as tTest
+import faceDetection as tTest
 import sys
 import os
 import crop
 import cv2
-from face_rec.recognize import EigenfaceRecon,FishRecon
+from face_rec.recognize import EigenfaceRecon,FishRecon,EigenRecon
 from face_rec.utils import make_array,judge
 from PIL import Image
+import matplotlib.pyplot as plt
 
 filepath = sys.argv[1]
 
@@ -22,15 +23,20 @@ W = int(W)
 centerY = (rect[3] + rect[1])/2
 centerX = (rect[2] + rect[0])/2
 
-im = crop.cropp(filepath,centerX,centerY,W,H)
+im = crop.cropp(filepath,rect)
 
-arr = make_array(im)
+# arr = make_array(im)
+arr = np.asarray(im)
+plt.imshow(arr)
+plt.show()
 
-recon = FishRecon()
-best_idx,max_match = recon.recognize(arr)
-match = judge(max_match,int(best_idx))
+recon = EigenRecon('bin/phase2_dataset_1/')
+best_idx,max_match = recon.recognize(arr.flatten())
+print best_idx
+print max_match
+# # match = judge(max_match,int(best_idx))
 
-if match > -1:
-	sys.stdout.write("%i\n" % match)
-else:
-	sys.stdout.write("Face not in Database.")
+# if match > -1:
+# 	sys.stdout.write("%i\n" % match)
+# else:
+# 	sys.stdout.write("Face not in Database.")
