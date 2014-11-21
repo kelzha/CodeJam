@@ -24,17 +24,17 @@ def calcminmax(image, cont, lengthx, lengthy, minx, miny, maxx, maxy):
 			for j in i:
 				for k in j:
 					if k[0] > 10 and k[1] > delta and k[0] < image.shape[1] - delta and k[1] < image.shape[0]-10:
-						if k[0] < minx and k[1] > 90:
+						if k[0] < minx and k[1]:
 							minx = k[0]
-						if k[0] > maxx and k[1] > 90:
+						if k[0] > maxx and k[1]:
 							maxx = k[0]
 		if len(i) > lengthy:
 			for j in i:
 				for k in j:
 					if k[0] > 10 and k[1] > 10 and k[0] < image.shape[1] - 10 and k[1] < image.shape[0]-10:
-						if k[1] < miny and k[1] > 100:
+						if k[1] < miny and k[1]:
 							miny = k[1]
-						if k[1] > maxy and k[1] > 100:
+						if k[1] > maxy and k[1]:
 							maxy = k[1]
 	result = (minx, miny, maxx, maxy)
 	return result
@@ -82,34 +82,27 @@ def outerMostSet(s, imageFile):
 	return (minx, maxx)
 
 def cropPicture(centerX, centerY, H, W):
-	rect = (centerX - W/2, centerY - H/2, centerX + W/2, centerY + H/2)
+	rect = [centerX - W/2, centerY - H/2, centerX + W/2, centerY + H/2]
 	return rect
 
 '''Gets the final bounding rectangle of the face'''
 def getRectangle(impath):
 	filepath,filename = os.path.split(impath)
 	filtername,exts = os.path.splitext(filename)
-
-	'''Reads the first image and makes a preliminary bounding box'''
 	image = cv2.imread(impath, 0)
-	#equ = cv2.equalizeHist(image)
-	'''cv2.imshow(filtername, image)
-	cv2.waitKey(0)
-	cv2.imshow(filtername, equ)
-	cv2.waitKey(0)'''
 	edge = cv2.Canny(image, 150, 150)
 	binary, dst = cv2.threshold(edge,130,255,0)
 	contours, h = cv2.findContours(dst,cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
-	rect = calcminmax(image, contours, 45, 5, image.shape[1], image.shape[0], 0, 0)
+	rect = calcminmax(image, contours, 45, 20, image.shape[1], image.shape[0], 0, 0)
 	
-	print image.shape[0]
-	delta = float(85)/float(480) * float(image.shape[0])
+	delta = float(125)/float(480) * float(image.shape[0])
 	centerY = float(rect[1] + delta)
 	m = outerMostSet(findOuterSet(contours, centerY, 15), image)
 	Width = float(m[1] - m[0])
 	centerX = float(m[0]) + Width/2
 	Height = float(Width * 1.418)
 	rect1 = cropPicture(int(centerX),int(centerY), int(Height), int(Width))
+	rect1[1] = min(rect1[1], rect[1])
 	#cv2.rectangle(image, (rect1[0], rect1[1]), (rect1[2], rect1[3]), (0,255,0))	
 	
 	'''Reads the image again and contrasts it for shadows'''
@@ -128,9 +121,8 @@ def getRectangle(impath):
 	cv2.waitKey(0)
 	return rect1
 
-'''
-files = glob.glob("./participantdataset/*/*")
---- 	
+'''files = glob.glob("./OurTeam/*")
+
 ARList = [0] * len(files)
 CenterX = [0] * len(files)
 CenterY = [0] * len(files)
@@ -142,6 +134,7 @@ for imageFile in files:
 	rect = getRectangle(imageFile)
 	print rect
 	crop.cropp(imageFile, rect)
+	''''''
  	width = rect[2] - rect[0]
  	height = rect[3] - rect[1]
  	Width[counter] = width

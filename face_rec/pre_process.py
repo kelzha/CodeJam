@@ -238,7 +238,7 @@ if __name__ == '__main__':
 	from utils import make_array,get_IDs
 	from PIL import Image
 
-	trained_names = glob.glob('participantdataset_min4samples/*.bmp')
+	trained_names = glob.glob('doug_last_minute/*.png')
 	im = Image.open(trained_names[0]).convert("L")
 	H,W = np.shape(im)
 
@@ -272,7 +272,7 @@ if __name__ == '__main__':
 	# trainer.save('bin/phase2_eigenfacial_minsample/')
 
 	trainer = FishTrainer(arr,IDs)
-	trainer.save('bin/phase2_fish_minsample/')
+	trainer.save('bin/phase2_fish_doug_lastminute/')
 
 
 

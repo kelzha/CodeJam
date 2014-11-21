@@ -10,6 +10,7 @@ from face_rec.recognize import EigenfaceRecon,FishRecon,EigenRecon
 from face_rec.utils import make_array,judge
 from PIL import Image
 import matplotlib.pyplot as plt
+import glob
 
 import numpy as np
 
@@ -44,14 +45,14 @@ arr = np.asarray(im)
 ################
 ########Use Fish
 ################
-recon = FishRecon('bin/phase2_fish_minsample/')
-best_idx,max_match = recon.recognize(arr.flatten())
-print best_idx
-print max_match
-if max_match > 10:
-	print "This is : %r" % best_idx
-else:
-	print "No match."
+# recon = FishRecon('bin/phase2_fish_minsample/')
+# best_idx,max_match = recon.recognize(arr.flatten())
+# # print best_idx
+# # print max_match
+# if max_match > 15.5:
+# 	print "This is : %r" % best_idx
+# else:
+# 	print "No match."
 
 ################
 ########Use Eigen
@@ -64,3 +65,21 @@ else:
 # 	print "This is : %r" % best_idx[0]
 # else:
 # 	print "No match."
+
+all_files = glob.glob('................................')
+print all_files
+s = raw_input('Is this fine?\n>')
+if s == 'y':
+	pass
+else:
+	sys.exit()
+
+for a_file in all_files:
+	recon = FishRecon(a_file)
+	best_idx,max_match = recon.recognize(arr.flatten())
+	if max_match > 15.5:
+		print "%s returns :  %r" % (a_file,best_idx)
+	else:
+		print "%s returns : No match." % (a_file)
+
+
