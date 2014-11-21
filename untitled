@@ -1,0 +1,13 @@
+import numpy as np
+import cv2
+import sys
+from PIL import Image
+import glob
+import crop
+import aspectRatio
+import os
+
+files = glob.glob("./Manual Crop/*")
+for imageFile in files:
+	rect = (0, 0, imageFile.size[0], imageFile.size[1])
+	crop.cropp(imageFile,rect)
