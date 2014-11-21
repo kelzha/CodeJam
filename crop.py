@@ -12,7 +12,7 @@ def cropp(imageFile, rect):
     filtername,exts = os.path.splitext(filename)
     im = Image.open(imageFile).convert("L")
 
-    GoldenRto = 1.618
+    GoldenRto = 1.418
 
     #print im.size
     #Address blackboxing at bottom
@@ -31,7 +31,7 @@ def cropp(imageFile, rect):
 
     fixedW = 160
 
-    fixedH = fixedW * GoldenRto
+    fixedH = int(fixedW * GoldenRto)
 
 
 
