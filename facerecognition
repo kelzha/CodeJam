@@ -1,4 +1,5 @@
 #!/usr/local/bin/python
+# IMPORTANT THE ABOVE SHOULD MATCH THE PATH TO PYTHON ON YOUR MACHINE
 
 import thresholdTest as tTest
 import sys
@@ -28,11 +29,11 @@ centerX = (rect[2] + rect[0])/2
 # print centerX
 # print centerY
 
-crop.cropp(filepath,centerX,centerY,W,H)
+im = crop.cropp(filepath,centerX,centerY,W,H)
 
-filepath = "edited_" + filepath
+#filepath = "edited_" + filepath
 
-arr = make_array(filepath)
+arr = make_array(im)
 
 recon = FishRecon()
 best_idx,max_match = recon.recognize(arr)

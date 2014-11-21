@@ -1,10 +1,10 @@
 from PIL import Image
 import numpy as np
 
-def make_array(filename):
+def make_array(im):
 	"""Makes and returns row vector from an filename to a CROPPED png image
 	"""
-	im = Image.open(filename).convert("L")
+	#im = Image.open(filename).convert("L")
 	arr = np.asarray(im).flatten()
 	return arr
 
