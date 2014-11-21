@@ -1,7 +1,6 @@
 from PIL import Image
 import glob
 import os
-import matplotlib.pyplot as plt
 import numpy as np
 
 #files = glob.glob("./training_dataset/*.png")
@@ -16,25 +15,24 @@ def cropp(imageFile, rect):
 
     #print im.size
     #Address blackboxing at bottom
-    bottom = rect[4]
-    top = rect[2]
-
+    bottom = rect[3]
+    top = rect[1]
+    left = rect[0]
+    right = rect[2]
+    
     if bottom > im.size[1]:
     	delta = bottom - im.size[1]
         top -= delta
     	bottom = im.size[1]
 
-
-    box = (rect[0], top, rect[3], bottom)
+    box = (rect[0], top, rect[2], bottom)
     # print box
     cropped_im = im.crop(box)
 
     fixedW = 160
 
     fixedH = int(fixedW * GoldenRto)
-
-
-
+    print filtername
     # plt.imshow(cropped_im)
-    return im.resize((fixedW,fixedH),Image.ANTIALIAS)
-    #cropped_im.save("edited_" +filtername+".png",'PNG')
+    cropped_im.resize((fixedW,fixedH),Image.ANTIALIAS)
+    cropped_im.save("./participantdataset_edited/" +filtername+"_edited.bmp",'BMP')

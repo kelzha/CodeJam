@@ -71,8 +71,8 @@ def mean(s):
 	mean = float(sum)/float(len(s))
 	return mean
 
-def outerMostSet(s):
-	minx = 100000
+def outerMostSet(s, imageFile):
+	minx = imageFile.shape[1]
 	maxx = 0
 	for i in s:
 		if i < minx:
@@ -95,10 +95,10 @@ def getRectangle(impath):
 	edge = cv2.Canny(image, 150, 150)
 	binary, dst = cv2.threshold(edge,130,255,0)
 	contours, h = cv2.findContours(dst,cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
-	rect = calcminmax(image, contours, 45, 5, image.shape[1], image.shape[0], 0, 0)
+	rect = calcminmax(image, contours, 45, 0, image.shape[1], image.shape[0], 0, 0)
 	
 	centerY = float(rect[1] + 85)
-	m = outerMostSet(findOuterSet(contours, centerY, 15))
+	m = outerMostSet(findOuterSet(contours, centerY, 15), image)
 	Width = float(m[1] - m[0])
 	centerX = float(m[0]) + Width/2
 	Height = float(Width * 1.418)
@@ -111,9 +111,9 @@ def getRectangle(impath):
 	#binary, dst = cv2.threshold(edge,130,255,0)
 	#contours, h = cv2.findContours(dst,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 	#rect = calcminmax(image, contours, 60, 20, rect1[0], rect1[1], rect1[2], rect1[3])
-	'''
+	
 	image = cv2.imread(impath)
-	cv2.drawContours(image, contours,-1, (0,255,0))
+	'''cv2.drawContours(image, contours,-1, (0,255,0))
 	cv2.rectangle(image, (rect1[0], rect[1]), (rect1[2], rect1[3]), (0, 0, 255))
 	cv2.rectangle(image, (int(centerX)-10, int(centerY)-10), (int(centerX)+10, int(centerY)+10), (255,0,0))
 	cv2.rectangle(image, (rect1[0], rect1[1]), (rect1[2], rect1[3]), (0,255,0))
@@ -129,10 +129,12 @@ CenterY = [0] * len(files)
 Width = [0] * len(files)
 Height = [0] * len(files)
 counter = 0
-
+rectList = [(0, 0, 0, 0)] * len(files)
 for imageFile in files:
 	rect = getRectangle(imageFile)
- 	width = rect[2] - rect[0]
+	print rect
+	crop.cropp(imageFile, rect)
+ 	'''width = rect[2] - rect[0]
  	height = rect[3] - rect[1]
  	Width[counter] = width
  	print Width[counter]
@@ -142,13 +144,14 @@ for imageFile in files:
  	CenterY[counter] = rect[1] + height/2
  	ARList[counter] = float(width)/float(height)
  	print ARList[counter]
- 	counter += 1
+ 	counter += 1'''
 
+'''
 AR = aspectRatio.getAverage(ARList)
 width = aspectRatio.getAverage(Width)
 height = aspectRatio.getAverage(Height)
 
 counter = 0
 for imageFile in files:
- 	crop.cropp(imageFile, CenterX[counter], CenterY[counter], width, height)
- 	counter = counter + 1
+ 	crop.cropp(imageFile, )
+ 	counter = counter + 1'''
