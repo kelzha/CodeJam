@@ -1,6 +1,8 @@
 import numpy as np
 from pre_process import FishTrainer
 from utils import make_array
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 
 def project_face(centered_face,eigenfaces):
 	"""Projects the novel centered face in the eigenface space.
@@ -62,8 +64,12 @@ class EigenRecon(object):
 
 		# best_fit = diff.argmin()
 		# return (self.labels[best_fit], diff.min())
-
-		best_fits = diff.argsort()[:5]
+		plt.imshow(self.mean_image.reshape(226,160),cmap=cm.Greys_r)
+		plt.show()
+		for eigenface in self.eigenfaces[:10]:
+			plt.imshow(self.mean_image.reshape(226,160),cmap=cm.Greys_r)
+			plt.show()
+		best_fits = diff.argsort()[:10]
 		return (np.array(self.labels)[best_fits],diff[best_fits])
 
 
@@ -73,10 +79,14 @@ class EigenfaceRecon(object):
 	"""Used to predict ID of faces"""
 	def __init__(self,folder):
 		# folder = 'bin/eigenfaces/'
+		print folder+'eigenfaces.npy'
 		self.eigenfaces = np.load(folder+'eigenfaces.npy')
 		self.labels = np.load(folder+'labels.npy')
 		self.mean_image = np.load(folder+'mean_image.npy')
 		self.scores = np.load(folder+'scores.npy')
+		# for eigenface in self.eigenfaces[:5]:
+			# plt.imshow(self.eigenfaces.reshape(226,160),cmap=cm.Greys_r)
+			# plt.show()
 
 	def recognize(self,novel_vector):
 		"""For now, this uses euclidian difference.
@@ -110,14 +120,43 @@ class EigenfaceRecon(object):
 			error is the best match.
 		"""
 		novel_score = project_face(novel_vector-self.mean_image,
-								self.eigenfaces)
+								self.eigenfaces.T)
 
-		#Euclidian difference.
+		# #Euclidian difference.
 		diff = euclidian_diff(self.scores,novel_score)
 
-		best_fit = diff.argmin()
-		# print "I AM IN THE WRONG DAMN FN"
-		return (int(self.labels[best_fit]), diff.min())
+		# best_fit = diff.argmin()
+		# # print "I AM IN THE WRONG DAMN FN"
+		# return (int(self.labels[best_fit]), diff.min())
+		# plt.imshow(self.mean_image.reshape(226,160),cmap=cm.Greys_r)
+		# plt.show()
+		# for eigenface in self.eigenfaces[:10]:
+		# 	plt.imshow(eigenface.reshape(226,160),cmap=cm.Greys_r)
+		# 	plt.show()
+		half = int(len(diff)/2)
+		best_fits = diff.argsort()[:half]
+		# print self.labels[best_fits]
+		d = {}
+		for a_diff,a_label in zip(diff[best_fits],self.labels[best_fits]):
+			try:
+				d[a_label][0] += a_diff
+				d[a_label][1] += 1
+			except KeyError:
+				d[a_label] = [a_diff,1]
+
+		# print d
+		import operator
+		for keys in d:
+			d[keys] = d[keys][0]/d[keys][1]
+			# print keys
+			# print d[keys]
+
+		sorted_d = sorted(d.items(), key=operator.itemgetter(1))
+		for x in sorted_d:
+			print x
+		# print sorted_d
+
+		return (np.array(self.labels)[best_fits],diff[best_fits])
 
 
 
