@@ -250,15 +250,26 @@ if __name__ == '__main__':
 		try:
 			arr[index,:] = make_array(filename)
 		except ValueError:
+			# pass
 			print filename
-			
-	split_ID = lambda x:int(x.split('\\')[1].split('_')[0])
-	IDs = [split_ID(name) for name in trained_names]
-	print IDs[::5]
+	
+	IDs = []
+	for a_name in trained_names:
+		un_split = a_name.split('\\')[1].split('_')
+		try:
+			ID = int(un_split[0])
+			# print ID
+			IDs.append(un_split[0])
+		except ValueError:
+			ID = un_split[0]+'_'+un_split[1].split('.')[0]
+			IDs.append(ID)
+	# split_ID = lambda x:x.split('\\')[1].split('_')[0]
+	# IDs = [split_ID(name) for name in trained_names]
+	# print IDs
 
-	# trainer = FishTrainer(arr,IDs)
-	# trainer.train()
-	# trainer.save('bin/phase2_fish_1/')
+	trainer = FishTrainer(arr,IDs)
+	trainer.train()
+	trainer.save('bin/phase2_fish_1/')
 
 
 
