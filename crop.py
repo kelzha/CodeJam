@@ -34,5 +34,4 @@ def cropp(imageFile, rect):
     fixedH = int(fixedW * GoldenRto)
     print filtername
     # plt.imshow(cropped_im)
-    cropped_im.resize((fixedW,fixedH),Image.ANTIALIAS)
-    cropped_im.save("./participantdataset_edited/" +filtername+"_edited.bmp",'BMP')
+    (cropped_im.resize((fixedW,fixedH),Image.ANTIALIAS)).save("./participantdataset_edited/" +filtername+"_edited.bmp",'BMP')
