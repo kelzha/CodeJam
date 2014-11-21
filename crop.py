@@ -32,10 +32,13 @@ def cropp(imageFile, rect):
     fixedW = 160
 
     fixedH = int(fixedW * GoldenRto)
-    print filtername
+
+    return cropped_im.resize((fixedW,fixedH),Image.ANTIALIAS)
+
+    # print filtername
     # plt.imshow(cropped_im)
-    (cropped_im.resize((fixedW,fixedH),Image.ANTIALIAS)).save("./Crop_edited/" +filtername+"_edited.bmp",'BMP')
-    '''image = cv2.imread("./participantdataset_edited/" +filtername+"_edited.bmp", 0)
-    equ = cv2.equalizeHist(image)
-    im = Image.fromarray(equ)
-    im.save("./participantdataset_edited/" +filtername+"_edited.bmp",'BMP')'''
+    # (cropped_im.resize((fixedW,fixedH),Image.ANTIALIAS)).save("./Crop_edited/" +filtername+"_edited.bmp",'BMP')
+    # '''image = cv2.imread("./participantdataset_edited/" +filtername+"_edited.bmp", 0)
+    # equ = cv2.equalizeHist(image)
+    # im = Image.fromarray(equ)
+    # im.save("./participantdataset_edited/" +filtername+"_edited.bmp",'BMP')'''
