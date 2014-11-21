@@ -44,19 +44,23 @@ arr = np.asarray(im)
 ################
 ########Use Fish
 ################
-# recon = FishRecon('bin/phase2_fish_1/')
-# best_idx,max_match = recon.recognize(arr.flatten())
-# if max_match > 10:
-# 	print "This is : %r" % best_idx
-# else:
-# 	print "No match."
+recon = FishRecon('bin/phase2_fish_minsample/')
+best_idx,max_match = recon.recognize(arr.flatten())
+print best_idx
+print max_match
+if max_match > 10:
+	print "This is : %r" % best_idx
+else:
+	print "No match."
 
 ################
 ########Use Eigen
 #################
-recon = EigenfaceRecon('bin/phase2_eigenfacial_2/')
-best_idx,max_match = recon.recognize(arr.flatten())
-if max_match[0] < 10000:
-	print "This is : %r" % best_idx[0]
-else:
-	print "No match."
+# recon = EigenfaceRecon('bin/phase2_eigenfacial_minsample/')
+# best_idx,max_match = recon.recognize(arr.flatten())
+# print best_idx[:5]
+# print max_match[:5]
+# if max_match[0] < 10000:
+# 	print "This is : %r" % best_idx[0]
+# else:
+# 	print "No match."

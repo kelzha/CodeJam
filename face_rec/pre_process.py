@@ -238,7 +238,7 @@ if __name__ == '__main__':
 	from utils import make_array,get_IDs
 	from PIL import Image
 
-	trained_names = glob.glob('participantdataset_noangle_edited/*.bmp')
+	trained_names = glob.glob('participantdataset_min4samples/*.bmp')
 	im = Image.open(trained_names[0]).convert("L")
 	H,W = np.shape(im)
 
@@ -267,9 +267,12 @@ if __name__ == '__main__':
 	# IDs = [split_ID(name) for name in trained_names]
 	# print IDs
 
-	trainer = EigenFacialTrainer(arr,IDs)
-	trainer.train()
-	trainer.save('bin/phase2_eigenfacial_2/')
+	# trainer = EigenFacialTrainer(arr,IDs)
+	# trainer.train()
+	# trainer.save('bin/phase2_eigenfacial_minsample/')
+
+	trainer = FishTrainer(arr,IDs)
+	trainer.save('bin/phase2_fish_minsample/')
 
 
 

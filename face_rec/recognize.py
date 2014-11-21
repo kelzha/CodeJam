@@ -135,6 +135,8 @@ class EigenfaceRecon(object):
 		# 	plt.show()
 		half = int(len(diff)/2)
 		best_fits = diff.argsort()[:half]
+
+		return (self.labels[best_fits],diff[best_fits])
 		# print self.labels[best_fits]
 		d = {}
 		for a_diff,a_label in zip(diff[best_fits],self.labels[best_fits]):
