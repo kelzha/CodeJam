@@ -102,7 +102,8 @@ def getRectangle(impath):
 	contours, h = cv2.findContours(dst,cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
 	rect = calcminmax(image, contours, 45, 5, image.shape[1], image.shape[0], 0, 0)
 	
-	centerY = float(rect[1] + 85)
+	delta = float(85)/float(480) * float(480)
+	centerY = float(rect[1] + delta)
 	m = outerMostSet(findOuterSet(contours, centerY, 15), image)
 	Width = float(m[1] - m[0])
 	centerX = float(m[0]) + Width/2
@@ -125,7 +126,7 @@ def getRectangle(impath):
 	cv2.imshow(filtername, image)
 	cv2.waitKey(0)'''
 	return rect1
-
+'''
 files = glob.glob("./participantdataset/*/*")
 
 ARList = [0] * len(files)
@@ -139,7 +140,7 @@ for imageFile in files:
 	rect = getRectangle(imageFile)
 	print rect
 	crop.cropp(imageFile, rect)
- 	'''width = rect[2] - rect[0]
+ 	width = rect[2] - rect[0]
  	height = rect[3] - rect[1]
  	Width[counter] = width
  	print Width[counter]
