@@ -15,11 +15,14 @@ def project_face(centered_face,eigenfaces):
 # 	def load(self,files):
 # 		for a_file in files
 # 		load(files)
+def euclidian_diff(trained_scores,novel_score):
+	difference = trained_scores - novel_score
+	return np.linalg.norm(difference,axis = 1)
 
 class EigenfaceRecon(object):
 	"""Used to predict ID of faces"""
-	def __init__(self):
-		folder = 'bin/eigenfaces/'
+	def __init__(self,folder):
+		# folder = 'bin/eigenfaces/'
 		self.eigenfaces = np.load(folder+'eigenfaces.npy')
 		self.labels = np.load(folder+'labels.npy')
 		self.mean_image = np.load(folder+'mean_image.npy')
@@ -58,22 +61,23 @@ class EigenfaceRecon(object):
 		"""
 		novel_score = project_face(novel_vector-self.mean_image,
 								self.eigenfaces)
-		diff = self.scores - novel_score
-		normalized = np.linalg.norm(diff,axis = 1)
 
-		best_fit = normalized.argmin()
-		print "I AM IN THE WRONG DAMN FN"
-		return int(self.labels[best_fit])
+		#Euclidian difference.
+		diff = euclidian_diff(self.scores,novel_score)
+
+		best_fit = diff.argmin()
+		# print "I AM IN THE WRONG DAMN FN"
+		return (int(self.labels[best_fit]), diff.min())
 
 
 
 class FishRecon(object):
-	def __init__(self):
-		self.mean = np.load('bin/fishfaces/mean.npy')
-		self.scalings = np.load('bin/fishfaces/scalings.npy')
-		self.coeffs = np.load('bin/fishfaces/coef.npy')
-		self.intercept = np.load('bin/fishfaces/intercept.npy')
-		self.classes = np.load('bin/fishfaces/classes.npy')
+	def __init__(self,folder):
+		self.mean = np.load(folder+'mean.npy')
+		self.scalings = np.load(folder+'scalings.npy')
+		self.coeffs = np.load(folder+'coef.npy')
+		self.intercept = np.load(folder+'intercept.npy')
+		self.classes = np.load(folder+'classes.npy')
 
 # fish=FishTrainer(train,labels)
 # self.mean,self.scalings,self.coeffs,self.intercept,self.classes = fish.data()
