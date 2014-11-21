@@ -41,7 +41,9 @@ arr = np.asarray(im)
 plt.imshow(arr)
 plt.show()
 
-recon = EigenRecon('bin/phase2_dataset_1/')
+# recon = EigenRecon('bin/phase2_dataset_1/')
+recon = FishRecon('bin/phase2_fish_1/')
+
 best_idx,max_match = recon.recognize(arr.flatten())
 print best_idx
 print max_match

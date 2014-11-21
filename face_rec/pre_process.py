@@ -67,6 +67,9 @@ class FishTrainer(object):
 		self.lda = LDA()
 		self.lda.fit(train,labels)
 
+	def train(self):
+		pass
+
 	def data(self):
 		return (self.lda.xbar_,
 				self.lda.scalings_,
