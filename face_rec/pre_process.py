@@ -4,6 +4,7 @@ import numpy as np
 import itertools
 from sklearn.lda import LDA
 from sklearn.decomposition.pca import PCA
+import algorithms
 
 def make_eigenfaces(cropped_figs,number_of_eigenfaces = None):
     """Inputs : 
@@ -66,6 +67,9 @@ class FishTrainer(object):
 		self.lda = LDA()
 		self.lda.fit(train,labels)
 
+	def train(self):
+		pass
+
 	def data(self):
 		return (self.lda.xbar_,
 				self.lda.scalings_,
@@ -91,7 +95,31 @@ class FishTrainer(object):
 		np.save(folder_path+'classes',self.lda.classes_)
 		# return d
 
+class EigenTrainer(object):
 
+    def __init__(self,faces,labels):
+		assert(faces.shape[0] == len(labels) or faces.shape[1] == len(labels))
+
+		self.faces = faces; self.labels = labels
+		self.num_of_faces = faces.shape[0]
+
+    def get_score(self,faces):
+		centered_faces = faces - self.mean_image
+		return np.dot(centered_faces,self.eigenfaces)		
+
+    def train(self,k = 0):
+        [self.eigenvalues,self.eigenfaces,self.mean_image] = algorithms.pca(self.faces,self.labels, k)
+
+        self.scores = self.get_score(self.faces)
+        # self.get_score(self.faces)
+    def save(self,folder):
+		np.save(folder+'eigenfaces',self.eigenfaces)
+		np.save(folder+'eigenvalues',self.eigenvalues)
+		np.save(folder+'mean_image',self.mean_image)
+		np.save(folder+'labels',self.labels)
+		np.save(folder+'scores',self.scores)
+
+       	
 
 
 
@@ -206,16 +234,43 @@ def pre_process(filenames):
 if __name__ == '__main__':
 	"""If running python script, give folder name as argument
 	"""
-	import sys
 	import glob
+	from utils import make_array,get_IDs
+	from PIL import Image
 
-	folder_path = str(sys.argv[1])
-	add = ''
-	if folder_path[-1] != '/':
-		add = '/'
+	trained_names = glob.glob('participantdataset_noangle_edited/*.bmp')
+	im = Image.open(trained_names[0]).convert("L")
+	H,W = np.shape(im)
 
-	file_names = glob.glob(folder_path+add+'*.png')
-	pre_process(file_names)
+	arr = np.zeros([len(trained_names), H * W])
+	for index,filename in enumerate(trained_names):
+
+	    # im = Image.open(filename).convert("L")
+	    # arr[i,:] = np.reshape(np.asarray(im),[1,H*W])
+		try:
+			arr[index,:] = make_array(filename)
+		except ValueError:
+			# pass
+			print filename
+	
+	IDs = []
+	for a_name in trained_names:
+		un_split = a_name.split('\\')[1].split('_')
+		try:
+			ID = int(un_split[0])
+			# print ID
+			IDs.append(un_split[0])
+		except ValueError:
+			ID = un_split[0]+'_'+un_split[1].split('.')[0]
+			IDs.append(ID)
+	# split_ID = lambda x:x.split('\\')[1].split('_')[0]
+	# IDs = [split_ID(name) for name in trained_names]
+	# print IDs
+
+	trainer = FishTrainer(arr,IDs)
+	trainer.train()
+	trainer.save('bin/phase2_fish_1/')
+
 
 
 

@@ -1,11 +1,12 @@
 import numpy as np
 from pre_process import FishTrainer
+from utils import make_array
 
 def project_face(centered_face,eigenfaces):
 	"""Projects the novel centered face in the eigenface space.
 	This essentially returns its SCORE. 
 	"""
-	return np.dot(centered_face,eigenfaces.T)
+	return np.dot(centered_face,eigenfaces)
 
 # class BaseRecon(object):
 # 	"""Base model to predict ID of faces after training"""
@@ -19,6 +20,55 @@ def euclidian_diff(trained_scores,novel_score):
 	difference = trained_scores - novel_score
 	return np.linalg.norm(difference,axis = 1)
 
+def mahcos_diff(trained_scores,novel_score,eigenvalues):
+	# print "hi"
+	sigma = np.sqrt(eigenvalues)
+	m = trained_scores/sigma
+	n = novel_score/sigma
+
+	return -1.0 * m.dot(n) / (np.linalg.norm(m)*np.linalg.norm(n))
+
+def mah_euclid_diff(trained_scores,novel_score,eigenvalues):
+	sigma = np.sqrt(eigenvalues)
+	m = trained_scores/sigma
+	n = novel_score/sigma
+
+	print sigma
+	print m
+	print n
+	return np.linalg.norm(m-n,axis=0)
+
+def soft_diff(trained_scores,novel_score,eigenvalues):
+	lam = eigenvalues**0.2
+	diff = np.empty()
+
+class EigenRecon(object):
+
+	def __init__(self,folder):
+		self.eigenfaces = np.load(folder+'eigenfaces.npy')
+		self.labels = np.load(folder+'labels.npy')
+		self.mean_image = np.load(folder+'mean_image.npy')
+		self.scores = np.load(folder+'scores.npy')
+		self.eigenvalues = np.load(folder+'eigenvalues.npy')
+
+	def recognize(self,novel_vector):
+		novel_score = project_face(novel_vector-self.mean_image,
+								self.eigenfaces)
+
+		#Euclidian difference.
+		diff = euclidian_diff(self.scores,novel_score)
+		# diff = mahcos_diff(self.scores,novel_score,self.eigenvalues)
+		# diff = mah_euclid_diff(self.scores,novel_score,self.eigenvalues)
+
+		# best_fit = diff.argmin()
+		# return (self.labels[best_fit], diff.min())
+
+		best_fits = diff.argsort()[:5]
+		return (np.array(self.labels)[best_fits],diff[best_fits])
+
+
+############################################################################
+#LEGACY
 class EigenfaceRecon(object):
 	"""Used to predict ID of faces"""
 	def __init__(self,folder):
@@ -94,7 +144,26 @@ class FishRecon(object):
 # 	return int(self.classes[best])
 # else:
    #  return int(self.classes[best]),float(res.max())
+
+def main():
+	recon = EigenRecon('bin/phase2_dataset_1/')
+
+	a_picture = make_array('doug_dune/IMG_20141121_042505.bmp')
+
+	predicted,fit = recon.recognize(a_picture)
+
+	print predicted
+	print fit
+
+
+
+
+
+
+if __name__ == '__main__':
+	main()
                         
+
 
 
 		

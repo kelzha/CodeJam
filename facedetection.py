@@ -102,7 +102,9 @@ def getRectangle(impath):
 	contours, h = cv2.findContours(dst,cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
 	rect = calcminmax(image, contours, 45, 5, image.shape[1], image.shape[0], 0, 0)
 	
-	centerY = float(rect[1] + 85)
+	print image.shape[0]
+	delta = float(85)/float(480) * float(image.shape[0])
+	centerY = float(rect[1] + delta)
 	m = outerMostSet(findOuterSet(contours, centerY, 15), image)
 	Width = float(m[1] - m[0])
 	centerX = float(m[0]) + Width/2
@@ -117,18 +119,18 @@ def getRectangle(impath):
 	#contours, h = cv2.findContours(dst,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 	#rect = calcminmax(image, contours, 60, 20, rect1[0], rect1[1], rect1[2], rect1[3])
 	
-	'''image = cv2.imread(impath)
+	image = cv2.imread(impath)
 	cv2.drawContours(image, contours,-1, (0,255,0))
 	cv2.rectangle(image, (rect1[0], rect[1]), (rect1[2], rect1[3]), (0, 0, 255))
 	cv2.rectangle(image, (int(centerX)-10, int(centerY)-10), (int(centerX)+10, int(centerY)+10), (255,0,0))
 	cv2.rectangle(image, (rect1[0], rect1[1]), (rect1[2], rect1[3]), (0,255,0))
 	cv2.imshow(filtername, image)
-	cv2.waitKey(0)'''
+	cv2.waitKey(0)
 	return rect1
 
-#files = glob.glob("./participantdataset/*/*")
-
 '''
+files = glob.glob("./participantdataset/*/*")
+--- 	
 ARList = [0] * len(files)
 CenterX = [0] * len(files)
 CenterY = [0] * len(files)
