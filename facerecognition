@@ -11,6 +11,9 @@ from face_rec.utils import make_array,judge
 from PIL import Image
 import matplotlib.pyplot as plt
 
+import numpy as np
+
+
 filepath = sys.argv[1]
 
 rect = tTest.getRectangle(filepath)
@@ -23,9 +26,17 @@ W = int(W)
 centerY = (rect[3] + rect[1])/2
 centerX = (rect[2] + rect[0])/2
 
+# im = crop.cropp(filepath,rect)
+# contents = open('avgHW.csv','r').read()
+
+# H,W = contents.split(',')
+# H = int(H)
+# W = int(W)
+# centerY = (rect[3] + rect[1])/2
+# centerX = (rect[2] + rect[0])/2
+
 im = crop.cropp(filepath,rect)
 
-# arr = make_array(im)
 arr = np.asarray(im)
 plt.imshow(arr)
 plt.show()
@@ -34,9 +45,3 @@ recon = EigenRecon('bin/phase2_dataset_1/')
 best_idx,max_match = recon.recognize(arr.flatten())
 print best_idx
 print max_match
-# # match = judge(max_match,int(best_idx))
-
-# if match > -1:
-# 	sys.stdout.write("%i\n" % match)
-# else:
-# 	sys.stdout.write("Face not in Database.")
