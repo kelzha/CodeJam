@@ -2,7 +2,7 @@ from PIL import Image
 import glob
 import os
 import numpy as np
-
+import cv2
 #files = glob.glob("./training_dataset/*.png")
 
 
@@ -35,3 +35,7 @@ def cropp(imageFile, rect):
     print filtername
     # plt.imshow(cropped_im)
     (cropped_im.resize((fixedW,fixedH),Image.ANTIALIAS)).save("./participantdataset_edited/" +filtername+"_edited.bmp",'BMP')
+    '''image = cv2.imread("./participantdataset_edited/" +filtername+"_edited.bmp", 0)
+    equ = cv2.equalizeHist(image)
+    im = Image.fromarray(equ)
+    im.save("./participantdataset_edited/" +filtername+"_edited.bmp",'BMP')'''

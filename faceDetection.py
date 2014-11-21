@@ -92,6 +92,11 @@ def getRectangle(impath):
 
 	'''Reads the first image and makes a preliminary bounding box'''
 	image = cv2.imread(impath, 0)
+	#equ = cv2.equalizeHist(image)
+	'''cv2.imshow(filtername, image)
+	cv2.waitKey(0)
+	cv2.imshow(filtername, equ)
+	cv2.waitKey(0)'''
 	edge = cv2.Canny(image, 150, 150)
 	binary, dst = cv2.threshold(edge,130,255,0)
 	contours, h = cv2.findContours(dst,cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
