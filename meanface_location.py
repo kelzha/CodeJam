@@ -48,10 +48,10 @@ def locate_face(file_path):
     i=0
     j=0
     testIm_W,testIm_H=testIm.size
-    decay=0.6
+    decay=0.5
     min_norm=9999999999999
     
-    kmax=4
+    kmax=8
     for k in xrange(1,kmax):
         testIm_c=cropSection(testIm,0,0,int(testIm_W/k**decay),int(testIm_H/k**decay),AR)
         testIm_c_W,testIm_c_H=testIm_c.size
@@ -143,7 +143,7 @@ def locate_face(file_path):
     # print " "
     # return centerX, centerY, Wi, He
     
-dataset=glob.glob('participantdataset/Knights of the DROP TABLE/*.*')
+dataset=glob.glob('Test Dataset/2670369438_9_.*')
 mean_face_imgfmt = [None] * len(dataset)
 kkk=0
 from face_rec.recognize import EigenfaceRecon,FishRecon,EigenRecon

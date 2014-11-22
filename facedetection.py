@@ -95,7 +95,7 @@ def getRectangle(impath):
 	contours, h = cv2.findContours(dst,cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
 	rect = calcminmax(image, contours, 45, 20, image.shape[1], image.shape[0], 0, 0)
 	
-	delta = float(125)/float(480) * float(image.shape[0])
+	delta = float(93)/float(480) * float(image.shape[0])
 	centerY = float(rect[1] + delta)
 	m = outerMostSet(findOuterSet(contours, centerY, 15), image)
 	Width = float(m[1] - m[0])
